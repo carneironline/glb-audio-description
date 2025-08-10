@@ -19,10 +19,10 @@ describe('TextReader - Integration Tests', () => {
         it('should handle complete accessibility workflow', async () => {
             // 1. User creates reader with accessibility preferences
             const accessibilityOptions: TextReaderOptions = {
-                voice: 'Google português do Brasil',
-                rate: 0.8, // Slower for better comprehension
-                volume: 1.0,
                 lang: 'pt-BR',
+                rate: 1.2,
+                pitch: 1.0,
+                volume: 1.0,
             };
 
             const reader = new TextReader(accessibilityOptions);
@@ -146,7 +146,7 @@ describe('TextReader - Integration Tests', () => {
 
             // Read Portuguese content
             textReader.setLang('pt-BR');
-            textReader.setVoiceByName('Google português do Brasil');
+            textReader.setVoiceByName(); // Seleção automática
             textReader.readTextFromSelector(['#pt-content']);
 
             // Switch to English content

@@ -21,7 +21,7 @@ O GLB Audio Description é um componente TypeScript que implementa funcionalidad
 ### Características Principais
 
 -   ✅ **Síntese de voz nativa** usando Web Speech API
--   ✅ **Suporte a múltiplas vozes** em português brasileiro
+-   ✅ **Seleção automática de voz** em português brasileiro
 -   ✅ **Controles de reprodução** completos (play, pause, resume, stop)
 -   ✅ **Leitura sequencial** de múltiplos elementos
 -   ✅ **Configuração flexível** de velocidade, tom e volume
@@ -87,13 +87,12 @@ import { TextReader } from './glb-audio-description/SpeechSynthesisUtterance';
 ```typescript
 // Criar instância do TextReader
 const audioDescription = new TextReader({
-    voice: 'Google português do Brasil',
     rate: 1.2,
     volume: 1.0,
     lang: 'pt-BR',
 });
 
-// Inicializar
+// Inicializar - vozes em português são selecionadas automaticamente
 audioDescription.init(() => {
     console.log('Audio Description iniciado!');
 
@@ -198,12 +197,12 @@ Para ajustar configurações como velocidade e volume, edite o objeto `config` e
 
 ```typescript
 const config: TextReaderOptions = {
-    voice: 'Google português do Brasil',
     pitch: 0.8, // Tom de voz
     volume: 1, // Volume
     rate: 1.0, // Velocidade
     lang: 'pt-BR', // Idioma
 };
+// Nota: A voz é selecionada automaticamente para português
 ```
 
 ## 📚 API
@@ -218,12 +217,12 @@ new TextReader(options?: TextReaderOptions)
 
 ```typescript
 interface TextReaderOptions {
-    voice?: 'Google português do Brasil' | 'Microsoft Daniel - Portuguese (Brazil)';
     lang?: string; // Código do idioma (default: 'pt-BR')
     rate?: number; // Velocidade: 0.1 - 10 (default: 1.2)
     pitch?: number; // Tom: 0 - 2 (default: 1)
     volume?: number; // Volume: 0 - 1 (default: 1)
 }
+// Nota: Seleção de voz é automática, priorizando vozes em português
 ```
 
 ### Métodos Principais
@@ -254,9 +253,9 @@ Para completamente a reprodução.
 
 ### Métodos de Configuração
 
-#### `setVoiceByName(name: string): void`
+#### `setVoiceByName(): void`
 
-Define a voz por nome.
+Executa seleção automática de voz, priorizando vozes em português brasileiro.
 
 #### `setRate(rate: number): void`
 
@@ -374,22 +373,22 @@ if ('speechSynthesis' in window) {
 }
 ```
 
-### Vozes Recomendadas
+### Vozes Automáticas
 
-#### Windows
+O sistema seleciona automaticamente a melhor voz disponível em português brasileiro, na seguinte ordem de prioridade:
 
--   **Microsoft Daniel - Portuguese (Brazil)**
--   **Microsoft Maria - Portuguese (Brazil)**
+#### Vozes Preferidas (em ordem)
 
-#### macOS/iOS
+1. **Google português do Brasil** - Chrome/Android
+2. **Microsoft Daniel - Portuguese (Brazil)** - Windows
+3. **Luciana (Portuguese - Brazil)** - macOS/iOS
 
--   **Luciana (Enhanced)** - Português (Brasil)
--   **Joana** - Português (Brasil)
+#### Fallback
 
-#### Chrome/Android
+Se nenhuma voz preferida estiver disponível, o sistema:
 
--   **Google português do Brasil**
--   **Portuguese Brazil Female/Male**
+-   Mostra um aviso no console
+-   Continua funcionando com a voz padrão do sistema
 
 ## 🔧 Desenvolvimento
 

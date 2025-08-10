@@ -152,17 +152,15 @@ export const createComplexScenario = (): void => {
 };
 
 // Helper para configurações de acessibilidade
-export const createAccessibilityOptions = (): TextReaderOptions => ({
-    voice: 'Google português do Brasil',
+export const createUserWorkflowConfig = (): TextReaderOptions => ({
     lang: 'pt-BR',
-    rate: 0.8,
-    pitch: 1.0,
-    volume: 1.0,
+    rate: 1.2,
+    pitch: 1,
+    volume: 1,
 });
 
 // Helper para configurações de velocidade
 export const createSpeedOptions = (): TextReaderOptions => ({
-    voice: 'Google português do Brasil',
     lang: 'pt-BR',
     rate: 1.5,
     pitch: 1.0,

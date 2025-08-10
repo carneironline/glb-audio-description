@@ -1,7 +1,4 @@
-const defaultVoice = 'Google português do Brasil';
-
 export interface TextReaderOptions {
-    voice?: typeof defaultVoice | 'Microsoft Daniel - Portuguese (Brazil)';
     lang?: string;
     rate?: number;
     pitch?: number;
@@ -13,14 +10,13 @@ export class TextReader {
     private selectedVoice: SpeechSynthesisVoice | null = null;
     private voices: SpeechSynthesisVoice[] = [];
     private currentText: string = '';
-    private options: TextReaderOptions = { voice: defaultVoice };
+    private options: TextReaderOptions;
     private delayMs: number = 500;
 
     constructor(options?: TextReaderOptions) {
         this.utterance = new SpeechSynthesisUtterance();
         this.options = {
             volume: 1,
-            voice: defaultVoice,
             lang: 'pt-BR',
             rate: 1.2,
             ...options,
@@ -28,9 +24,8 @@ export class TextReader {
     }
 
     private setOptions(options: TextReaderOptions): void {
-        if (options.voice) {
-            this.setVoiceByName(options.voice);
-        }
+        this.setVoiceByName();
+
         if (options.lang) {
             this.setLang(options.lang);
         }
@@ -74,13 +69,23 @@ export class TextReader {
         return this.voices;
     }
 
-    public setVoiceByName(name: string): void {
-        const voice = this.voices.find((v) => v.name === name);
-        if (voice) {
-            this.selectedVoice = voice;
-            this.utterance.voice = voice;
+    public setVoiceByName(): void {
+        const preferredNames = [
+            'Google português do Brasil',
+            'Microsoft Daniel - Portuguese (Brazil)',
+            'Luciana (Portuguese - Brazil)',
+        ];
+
+        const preferredVoice =
+            preferredNames
+                .map((name) => this.voices.find((v) => v.name && v.name.includes(name)))
+                .find(Boolean) || null;
+
+        if (preferredVoice) {
+            this.selectedVoice = preferredVoice;
+            this.utterance.voice = preferredVoice;
         } else {
-            console.warn(`Voz "${name}" não encontrada.`);
+            console.warn('Nenhuma voz preferida encontrada.');
         }
     }
 

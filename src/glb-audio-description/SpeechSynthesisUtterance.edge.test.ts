@@ -42,29 +42,62 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
             triggerVoicesChanged();
         });
 
-        it('should handle null voice name', () => {
+        it('should handle automatic voice selection when no preferred voices available', () => {
+            // Mockar vozes que não estão nas preferidas
+            const mockVoices = [
+                {
+                    name: 'English Voice',
+                    lang: 'en-US',
+                    voiceURI: 'English Voice',
+                    default: false,
+                    localService: false,
+                },
+            ] as any[];
+
+            // Criar um novo reader com o mock aplicado desde o início
+            vi.mocked(window.speechSynthesis.getVoices).mockReturnValue(mockVoices);
+
+            const newReader = new TextReader();
             const consoleSpy = vi.spyOn(console, 'warn');
-            textReader.setVoiceByName(null as any);
-            expect(consoleSpy).toHaveBeenCalled();
+
+            // Chamar init para carregar as vozes mockadas
+            const callback = vi.fn();
+            newReader.init(callback);
+            triggerVoicesChanged();
+
+            // Agora chamar setVoiceByName que deve mostrar o warning
+            newReader.setVoiceByName();
+
+            expect(consoleSpy).toHaveBeenCalledWith('Nenhuma voz preferida encontrada.');
         });
 
-        it('should handle undefined voice name', () => {
+        it('should handle automatic voice selection successfully', () => {
             const consoleSpy = vi.spyOn(console, 'warn');
-            textReader.setVoiceByName(undefined as any);
-            expect(consoleSpy).toHaveBeenCalled();
+            textReader.setVoiceByName();
+            // Com as vozes mockadas padrão, deve encontrar uma voz preferida
+            expect(consoleSpy).not.toHaveBeenCalledWith('Nenhuma voz preferida encontrada.');
         });
 
-        it('should handle special characters in voice name', () => {
-            const consoleSpy = vi.spyOn(console, 'warn');
-            textReader.setVoiceByName('Voice with special chars !@#$%^&*()');
-            expect(consoleSpy).toHaveBeenCalled();
+        it('should handle automatic voice selection multiple times', () => {
+            // Teste múltiplas chamadas do método automático
+            expect(() => {
+                for (let i = 0; i < 5; i++) {
+                    textReader.setVoiceByName();
+                }
+            }).not.toThrow();
         });
 
-        it('should handle very long voice name', () => {
+        it('should handle automatic voice selection with edge case voices', () => {
             const longName = 'a'.repeat(1000);
-            const consoleSpy = vi.spyOn(console, 'warn');
-            textReader.setVoiceByName(longName);
-            expect(consoleSpy).toHaveBeenCalled();
+            const mockVoices = [
+                { name: longName, lang: 'pt-BR', voiceURI: longName, default: false, localService: false },
+            ] as any[];
+
+            vi.mocked(window.speechSynthesis.getVoices).mockReturnValue(mockVoices);
+
+            expect(() => {
+                textReader.setVoiceByName();
+            }).not.toThrow();
         });
 
         it('should handle empty voices array', () => {
@@ -261,8 +294,8 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
 
             const voices = textReader.listVoices();
 
-            // Simular muitas mudanças de voz simultaneamente
-            const promises = voices.map((voice) => Promise.resolve(textReader.setVoiceByName(voice.name)));
+            // Simular muitas mudanças de voz simultaneamente (agora automáticas)
+            const promises = voices.map(() => Promise.resolve(textReader.setVoiceByName()));
 
             expect(() => Promise.all(promises)).not.toThrow();
         });
@@ -363,7 +396,7 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
             triggerVoicesChanged();
 
             expect(() => {
-                textReader.setVoiceByName('Voice1');
+                textReader.setVoiceByName(); // Agora é automático
             }).not.toThrow();
         });
     });

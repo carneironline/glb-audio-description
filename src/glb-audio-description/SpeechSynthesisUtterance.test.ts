@@ -25,7 +25,6 @@ describe('TextReader', () => {
 
         it('should create instance with custom options', () => {
             const options: TextReaderOptions = {
-                voice: 'Microsoft Daniel - Portuguese (Brazil)',
                 lang: 'en-US',
                 rate: 1.5,
                 pitch: 1.2,
@@ -69,7 +68,6 @@ describe('TextReader', () => {
 
         it('should apply options after initialization', async () => {
             const options: TextReaderOptions = {
-                voice: 'Google português do Brasil',
                 rate: 1.5,
             };
             const reader = new TextReader(options);
@@ -98,25 +96,27 @@ describe('TextReader', () => {
         it('should set voice by name when voice exists', () => {
             const consoleSpy = vi.spyOn(console, 'warn');
 
-            textReader.setVoiceByName('Google português do Brasil');
+            // Método setVoiceByName agora é automático (sem parâmetros)
+            textReader.setVoiceByName();
 
             expect(consoleSpy).not.toHaveBeenCalled();
         });
 
-        it('should warn when voice does not exist', () => {
+        it('should automatically select preferred voice', () => {
             const consoleSpy = vi.spyOn(console, 'warn');
 
-            textReader.setVoiceByName('Voz Inexistente');
+            // Com as vozes mockadas, deve selecionar automaticamente uma voz preferida
+            textReader.setVoiceByName();
 
-            expect(consoleSpy).toHaveBeenCalledWith('Voz "Voz Inexistente" não encontrada.');
+            // Não deve mostrar warning se encontrou uma voz preferida
+            expect(consoleSpy).not.toHaveBeenCalledWith('Nenhuma voz preferida encontrada.');
         });
 
-        it('should handle empty voice name', () => {
-            const consoleSpy = vi.spyOn(console, 'warn');
-
-            textReader.setVoiceByName('');
-
-            expect(consoleSpy).toHaveBeenCalled();
+        it('should handle automatic voice selection', () => {
+            // Teste da seleção automática - apenas verificamos que não dá erro
+            expect(() => {
+                textReader.setVoiceByName();
+            }).not.toThrow();
         });
     });
 
@@ -478,11 +478,9 @@ describe('TextReader', () => {
             textReader.init(callback);
             triggerVoicesChanged();
 
-            const voices = textReader.listVoices();
-
             // Mudar voz rapidamente múltiplas vezes
             for (let i = 0; i < 10; i++) {
-                textReader.setVoiceByName(voices[i % voices.length].name);
+                textReader.setVoiceByName(); // Agora é automático, sem parâmetros
             }
 
             expect(true).toBe(true);
