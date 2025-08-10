@@ -25,7 +25,7 @@ const mockSpeechSynthesis = {
             localService: true,
         },
     ]),
-    onvoiceschanged: null,
+    onvoiceschanged: null as (() => void) | null,
 };
 
 const mockSpeechSynthesisUtterance = vi.fn().mockImplementation(() => ({

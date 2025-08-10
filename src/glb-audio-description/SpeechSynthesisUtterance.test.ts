@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { TextReader } from '../glb-audio-description/SpeechSynthesisUtterance';
-import type { TextReaderOptions } from '../glb-audio-description/SpeechSynthesisUtterance';
-import { mockSpeechSynthesis, triggerVoicesChanged, triggerSpeechEnd, setSpeechState } from '../test/setup';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { TextReader } from './SpeechSynthesisUtterance';
+import type { TextReaderOptions } from './SpeechSynthesisUtterance';
+import { mockSpeechSynthesis, triggerVoicesChanged, setSpeechState } from '../test/setup';
 
 describe('TextReader', () => {
     let textReader: TextReader;
