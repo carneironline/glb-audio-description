@@ -24,6 +24,16 @@ body {
 h1 {
     font-size: 3.2em;
     line-height: 1.1;
+
+    @media (max-width: 767px) {
+        font-size: 1.8em;
+    }
+}
+
+h2 {
+    @media (max-width: 767px) {
+        font-size: 1.2em;
+    }
 }
 
 #app {
@@ -58,9 +68,13 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin: 40px 0 20px;
     width: fit-content;
     border: #383838 solid 1px;
     border-radius: 8px;
     padding: 1px 0 0 16px;
+    margin: 40px 0 20px;
+
+    @media (max-width: 767px) {
+        margin: 0px 0 40px;
+    }
 }
