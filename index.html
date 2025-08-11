@@ -8,6 +8,14 @@
     </head>
     <body>
         <div id="app">
+            <div class="audio-description">
+                <div class="audio-description__label">Ouça a matéria</div>
+                <div
+                    class="glb-audio-description"
+                    data-containersToRead='[".title", ".subtitle", ".content"]'
+                ></div>
+            </div>
+
             <h1 class="title">
                 Número 2 da diplomacia americana ataca Alexandre de Moraes em meio a crise com Trump
             </h1>
@@ -26,11 +34,6 @@
                     crescimento econômico.
                 </p>
             </div>
-
-            <div
-                class="glb-audio-description"
-                data-containersToRead='[".title", ".subtitle", ".content"]'
-            ></div>
         </div>
         <script type="module" src="/src/main.ts"></script>
     </body>

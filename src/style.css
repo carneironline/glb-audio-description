@@ -30,7 +30,6 @@ h1 {
     max-width: 1280px;
     margin: 0 auto;
     padding: 2rem;
-    text-align: center;
 }
 
 .card {
@@ -54,6 +53,14 @@ h1 {
     }
 }
 
-.glb-audio-description {
-    margin: 60px auto 20px;
+.audio-description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 40px 0 20px;
+    width: fit-content;
+    border: #383838 solid 1px;
+    border-radius: 8px;
+    padding: 1px 0 0 16px;
 }
