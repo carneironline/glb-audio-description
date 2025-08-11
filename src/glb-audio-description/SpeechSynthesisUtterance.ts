@@ -59,7 +59,6 @@ export class TextReader {
             }
         };
 
-        // Algumas vezes o evento precisa esperar o carregamento
         speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
         callback();
@@ -94,15 +93,15 @@ export class TextReader {
     }
 
     public setRate(rate: number): void {
-        this.utterance.rate = rate; // 0.1 a 10 (1 é o padrão)
+        this.utterance.rate = rate; // 0.1 a 10 (1 is default)
     }
 
     public setPitch(pitch: number): void {
-        this.utterance.pitch = pitch; // 0 a 2 (1 é o padrão)
+        this.utterance.pitch = pitch; // 0 a 2 (1 is default)
     }
 
     public setVolume(volume: number): void {
-        this.utterance.volume = volume; // 0 a 1 (1 é o padrão)
+        this.utterance.volume = volume; // 0 a 1 (1 is default)
     }
 
     public readTextFromSelector(selectors: string[]): void {
@@ -120,7 +119,7 @@ export class TextReader {
             let index = 0;
 
             const speakNext = () => {
-                if (index >= elements.length) return; // acabou
+                if (index >= elements.length) return;
 
                 const text = elements[index].textContent?.trim();
                 if (!text) {

@@ -113,7 +113,7 @@ Para integrar o componente de áudio descrição em uma página de matéria do O
 
 #### 1. Adicionar o Container HTML
 
-Adicione um elemento com a classe `glb-audio-description` onde você deseja que o componente apareça:
+Adicione um elemento com a classe `glb-audio-description` e configure os seletores CSS via `data-containersToRead`:
 
 ```html
 <!DOCTYPE html>
@@ -136,7 +136,10 @@ Adicione um elemento com a classe `glb-audio-description` onde você deseja que 
             </div>
 
             <!-- Container do componente de áudio descrição -->
-            <div class="glb-audio-description"></div>
+            <div 
+                class="glb-audio-description"
+                data-containersToRead='[".title", ".subtitle", ".content"]'
+            ></div>
         </article>
 
         <!-- Script do componente -->
@@ -150,9 +153,49 @@ Adicione um elemento com a classe `glb-audio-description` onde você deseja que 
 O script em `main.ts` irá automaticamente:
 
 -   🔍 **Detectar** todos os elementos com classe `glb-audio-description`
+-   📖 **Ler** o atributo `data-containersToRead` para identificar os seletores CSS
 -   🎛️ **Gerar** os controles de play/pause e stop dentro do container
 -   ⚙️ **Configurar** os event listeners para os botões
--   📖 **Definir** quais elementos serão lidos (título, subtítulo, conteúdo)
+-   � **Validar** se o atributo `data-containersToRead` está presente
+
+### ⚠️ Importante: Configuração Obrigatória
+
+O atributo `data-containersToRead` é **obrigatório**. Sem ele, o componente não será inicializado:
+
+```html
+<!-- ❌ Não funcionará - sem data-containersToRead -->
+<div class="glb-audio-description"></div>
+
+<!-- ✅ Funcionará corretamente -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='[".title", ".subtitle", ".content"]'
+></div>
+```
+
+### 📝 Formato do data-containersToRead
+
+O atributo deve conter um **array JSON válido** com seletores CSS:
+
+```html
+<!-- Exemplo básico -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='[".title", ".content"]'
+></div>
+
+<!-- Seletores mais específicos -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='["h1.titulo-materia", ".materia-lead", ".materia-texto p"]'
+></div>
+
+<!-- IDs e classes combinados -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='["#headline", ".subtitle", ".article-body"]'
+></div>
+```
 
 #### 3. Estrutura Gerada Automaticamente
 
@@ -170,16 +213,28 @@ O componente irá gerar esta estrutura HTML dentro do container:
 </div>
 ```
 
-#### 4. Customização de Seletores
+#### 4. Múltiplos Componentes na Página
 
-Para personalizar quais elementos serão lidos, edite a variável `containersToRead` em `main.ts`:
+Você pode ter múltiplos componentes de áudio descrição na mesma página, cada um com seus próprios seletores:
 
-```typescript
-// Configuração padrão
-const containersToRead = ['.title', '.subtitle', '.content'];
+```html
+<!-- Componente para o cabeçalho -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='[".title", ".subtitle"]'
+></div>
 
-// Exemplo para estrutura específica do O Globo
-const containersToRead = ['h1.materia-titulo', '.materia-subtitulo', '.materia-lead', '.materia-texto p'];
+<!-- Componente para o conteúdo principal -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='[".lead", ".content p"]'
+></div>
+
+<!-- Componente para uma seção específica -->
+<div 
+    class="glb-audio-description"
+    data-containersToRead='[".sidebar .related-articles"]'
+></div>
 ```
 
 #### 5. Estados do Componente

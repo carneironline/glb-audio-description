@@ -10,6 +10,233 @@ export const createTestTextReader = (options?: TextReaderOptions): TextReader =>
     return new TextReader(options);
 };
 
+// Helper para criar elementos de teste com data-containersToRead
+export const createTestElementWithDataAttr = (
+    id: string, 
+    content: string, 
+    selectors: string[], 
+    tag: string = 'div'
+): HTMLElement => {
+    const element = document.createElement(tag);
+    element.id = id;
+    element.textContent = content;
+    document.body.appendChild(element);
+
+    // Criar componente de áudio descrição correspondente
+    const audioComponent = document.createElement('div');
+    audioComponent.className = 'glb-audio-description';
+    audioComponent.setAttribute('data-containersToRead', JSON.stringify(selectors));
+    document.body.appendChild(audioComponent);
+
+    return element;
+};
+
+// Helper para criar componente de áudio descrição com configuração
+export const createAudioDescriptionComponent = (
+    selectors: string[],
+    className: string = 'glb-audio-description'
+): HTMLElement => {
+    const component = document.createElement('div');
+    component.className = className;
+    component.setAttribute('data-containersToRead', JSON.stringify(selectors));
+    document.body.appendChild(component);
+    return component;
+};
+
+// Helper para criar cenário completo com múltiplos componentes
+export const createMultiComponentScenario = (): void => {
+    const container = document.createElement('div');
+    container.innerHTML = `
+        <!-- Header section -->
+        <header>
+            <h1 class="page-title">Main Page Title</h1>
+            <nav class="breadcrumb">Home > Section > Page</nav>
+            <div 
+                class="glb-audio-description header-audio"
+                data-containersToRead='[".page-title", ".breadcrumb"]'
+            ></div>
+        </header>
+
+        <!-- Main content -->
+        <main>
+            <article>
+                <h2 class="article-title">Article Title</h2>
+                <p class="article-lead">Lead paragraph with important information.</p>
+                <div class="article-content">
+                    <p>First paragraph of content.</p>
+                    <p>Second paragraph of content.</p>
+                </div>
+                <div 
+                    class="glb-audio-description content-audio"
+                    data-containersToRead='[".article-title", ".article-lead", ".article-content p"]'
+                ></div>
+            </article>
+        </main>
+
+        <!-- Sidebar -->
+        <aside>
+            <h3 class="sidebar-title">Related Content</h3>
+            <ul class="related-links">
+                <li><a href="#">Related Link 1</a></li>
+                <li><a href="#">Related Link 2</a></li>
+            </ul>
+            <div 
+                class="glb-audio-description sidebar-audio"
+                data-containersToRead='[".sidebar-title", ".related-links"]'
+            ></div>
+        </aside>
+    `;
+    document.body.appendChild(container);
+};
+
+// Helper para testar parsing de data attributes
+export const testDataAttributeParsing = (
+    dataValue: string,
+    expectedResult?: string[] | null
+): { success: boolean; result?: string[]; error?: Error } => {
+    try {
+        const element = document.createElement('div');
+        element.setAttribute('data-containersToRead', dataValue);
+        
+        const containers = element.dataset.containerstoread;
+        if (!containers) {
+            return { success: false, result: undefined };
+        }
+
+        const parsed = JSON.parse(containers);
+        
+        if (expectedResult) {
+            const matches = JSON.stringify(parsed) === JSON.stringify(expectedResult);
+            return { success: matches, result: parsed };
+        }
+        
+        return { success: true, result: parsed };
+    } catch (error) {
+        return { success: false, error: error as Error };
+    }
+};
+
+// Helper para simular configuração realística do O Globo
+export const createGloboArticleScenario = (): void => {
+    const container = document.createElement('div');
+    container.innerHTML = `
+        <article class="materia">
+            <header class="materia-header">
+                <h1 class="materia-titulo">Título da Matéria do O Globo</h1>
+                <h2 class="materia-subtitulo">Subtítulo explicativo da matéria</h2>
+                <div class="materia-meta">
+                    <span class="autor">Por Jornalista</span>
+                    <time class="data">10/08/2025</time>
+                </div>
+            </header>
+
+            <div class="materia-corpo">
+                <p class="materia-lead">Lead da matéria com as informações principais.</p>
+                <div class="materia-texto">
+                    <p>Primeiro parágrafo do texto da matéria.</p>
+                    <p>Segundo parágrafo com desenvolvimento da notícia.</p>
+                    <p>Terceiro parágrafo com conclusão.</p>
+                </div>
+            </div>
+
+            <!-- Componente de áudio descrição configurado para O Globo -->
+            <div 
+                class="glb-audio-description"
+                data-containersToRead='[".materia-titulo", ".materia-subtitulo", ".materia-lead", ".materia-texto p"]'
+            ></div>
+        </article>
+    `;
+    document.body.appendChild(container);
+};
+
+// Helper para validar seletores CSS
+export const validateCSSSelectors = (selectors: string[]): boolean => {
+    return selectors.every(selector => {
+        try {
+            document.querySelector(selector);
+            return true;
+        } catch {
+            return false;
+        }
+    });
+};
+
+// Helper para simular interação com componente
+export const simulateComponentInteraction = async (
+    componentClass: string = 'glb-audio-description'
+): Promise<{
+    component: HTMLElement | null;
+    playButton: HTMLElement | null;
+    stopButton: HTMLElement | null;
+}> => {
+    const component = document.querySelector(`.${componentClass}`) as HTMLElement;
+    
+    if (!component) {
+        return { component: null, playButton: null, stopButton: null };
+    }
+
+    // Simular criação dos botões (como faria o main.ts)
+    component.innerHTML = `
+        <button class="glb-audio-description__button glb-audio-description__play">
+            <i class="glb-audio-description__play-icon" data-lucide="play"></i>
+            <i class="glb-audio-description__pause-icon" data-lucide="pause"></i>
+        </button>
+        <button class="glb-audio-description__button glb-audio-description__stop">
+            <i class="glb-audio-description__stop-icon" data-lucide="square"></i>
+        </button>
+    `;
+
+    const playButton = component.querySelector('.glb-audio-description__play') as HTMLElement;
+    const stopButton = component.querySelector('.glb-audio-description__stop') as HTMLElement;
+
+    return { component, playButton, stopButton };
+};
+
+// Helper para configurações de teste para data attributes
+export const createDataAttributeTestConfig = (): {
+    validConfigs: Array<{ selectors: string[]; description: string }>;
+    invalidConfigs: Array<{ data: string; description: string }>;
+} => {
+    return {
+        validConfigs: [
+            {
+                selectors: ['.title'],
+                description: 'single selector'
+            },
+            {
+                selectors: ['.title', '.subtitle', '.content'],
+                description: 'multiple selectors'
+            },
+            {
+                selectors: ['#main-title', '.article-body p', '.footer'],
+                description: 'mixed ID and class selectors'
+            },
+            {
+                selectors: ['.content[data-type="article"]', '.sidebar ul li'],
+                description: 'complex selectors with attributes'
+            }
+        ],
+        invalidConfigs: [
+            {
+                data: 'invalid json',
+                description: 'invalid JSON string'
+            },
+            {
+                data: '{"invalid": "object"}',
+                description: 'object instead of array'
+            },
+            {
+                data: '"string instead of array"',
+                description: 'string instead of array'
+            },
+            {
+                data: '[1, 2, 3]',
+                description: 'array of numbers instead of strings'
+            }
+        ]
+    };
+};
+
 // Helper para criar elementos DOM para teste
 export const createTestElement = (id: string, content: string, tag: string = 'div'): HTMLElement => {
     const element = document.createElement(tag);

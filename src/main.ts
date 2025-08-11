@@ -15,12 +15,17 @@ const classPause = 'is-paused';
 const classStop = 'is-stopped';
 const classNotPlayed = 'is-not-played';
 const elements = document.querySelectorAll(selectorMain);
-const containersToRead = ['.title', '.subtitle', '.content'];
+let containersToRead: string[] = [];
 const reader = new TextReader(config);
 
 reader.init(() => {
     if (elements.length) {
         elements.forEach((element) => {
+            const containers = (element as HTMLElement).dataset.containerstoread;
+
+            if (!containers) return;
+
+            containersToRead = JSON.parse(containers);
             element.classList.add(classNotPlayed);
             element.insertAdjacentHTML(
                 'afterbegin',

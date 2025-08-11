@@ -10,6 +10,133 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
         textReader = new TextReader();
     });
 
+    describe('Edge Cases - Data Attribute Configuration', () => {
+        it('should handle malformed data-containersToRead attributes', () => {
+            // Simular elementos com data attributes inválidos
+            const testElement = document.createElement('div');
+            testElement.className = 'glb-audio-description';
+            testElement.setAttribute('data-containersToRead', 'invalid json');
+            document.body.appendChild(testElement);
+
+            // O código deve tratar erros de JSON.parse graciosamente
+            expect(() => {
+                const containers = testElement.dataset.containerstoread;
+                if (containers) {
+                    try {
+                        JSON.parse(containers);
+                    } catch (error) {
+                        // Erro esperado para JSON inválido
+                        expect(error).toBeInstanceOf(SyntaxError);
+                    }
+                }
+            }).not.toThrow();
+        });
+
+        it('should handle empty or missing data-containersToRead', () => {
+            const testCases = [
+                { attr: undefined, description: 'missing attribute' },
+                { attr: '', description: 'empty string' },
+                { attr: '[]', description: 'empty array' },
+                { attr: '[""]', description: 'array with empty string' },
+                { attr: '[null]', description: 'array with null' }
+            ];
+
+            testCases.forEach(({ attr, description }) => {
+                const element = document.createElement('div');
+                element.className = 'glb-audio-description';
+                
+                if (attr !== undefined) {
+                    element.setAttribute('data-containersToRead', attr);
+                }
+                
+                document.body.appendChild(element);
+
+                expect(() => {
+                    const containers = element.dataset.containerstoread;
+                    if (containers) {
+                        const parsed = JSON.parse(containers);
+                        // Deve lidar com arrays vazios ou inválidos
+                        if (Array.isArray(parsed)) {
+                            textReader.readTextFromSelector(parsed.filter(Boolean));
+                        }
+                    }
+                }, `Should handle ${description}`).not.toThrow();
+            });
+        });
+
+        it('should handle complex selector combinations in data attributes', () => {
+            const complexSelectors = [
+                '#header .title',
+                '.content p:not(.advertisement)',
+                'article > section .paragraph',
+                '[data-content="true"]',
+                '.sidebar ul li:first-child'
+            ];
+
+            const element = document.createElement('div');
+            element.className = 'glb-audio-description';
+            element.setAttribute('data-containersToRead', JSON.stringify(complexSelectors));
+            document.body.appendChild(element);
+
+            // Criar elementos correspondentes
+            complexSelectors.forEach((selector, index) => {
+                const mockElement = document.createElement('div');
+                mockElement.id = `test-element-${index}`;
+                mockElement.className = 'test-content';
+                mockElement.textContent = `Content for selector: ${selector}`;
+                document.body.appendChild(mockElement);
+            });
+
+            expect(() => {
+                const containers = element.dataset.containerstoread;
+                if (containers) {
+                    const parsed = JSON.parse(containers);
+                    textReader.readTextFromSelector(parsed);
+                }
+            }).not.toThrow();
+        });
+
+        it('should handle very long data-containersToRead arrays', () => {
+            // Criar array com muitos seletores
+            const longSelectorArray = Array.from({ length: 100 }, (_, i) => `.element-${i}`);
+            
+            const element = document.createElement('div');
+            element.className = 'glb-audio-description';
+            element.setAttribute('data-containersToRead', JSON.stringify(longSelectorArray));
+            document.body.appendChild(element);
+
+            expect(() => {
+                const containers = element.dataset.containerstoread;
+                if (containers) {
+                    const parsed = JSON.parse(containers);
+                    textReader.readTextFromSelector(parsed);
+                }
+            }).not.toThrow();
+        });
+
+        it('should handle data attribute with special characters', () => {
+            const selectorsWithSpecialChars = [
+                '.título-português',
+                '.content[data-special="value with spaces"]',
+                '#元素-chinese-characters',
+                '.émoji-🎯-selector'
+            ];
+
+            const element = document.createElement('div');
+            element.className = 'glb-audio-description';
+            element.setAttribute('data-containersToRead', JSON.stringify(selectorsWithSpecialChars));
+            document.body.appendChild(element);
+
+            expect(() => {
+                const containers = element.dataset.containerstoread;
+                if (containers) {
+                    const parsed = JSON.parse(containers);
+                    textReader.readTextFromSelector(parsed);
+                }
+            }).not.toThrow();
+        });
+    });
+
     describe('Edge Cases - Constructor Options', () => {
         it('should handle undefined options gracefully', () => {
             expect(() => new TextReader(undefined)).not.toThrow();

@@ -16,6 +16,123 @@ describe('TextReader - Integration Tests', () => {
     });
 
     describe('Complete User Workflows', () => {
+        it('should handle data-containersToRead integration workflow', async () => {
+            // Setup realistic HTML structure com data attribute
+            const setupDataAttributeContent = () => {
+                const page = document.createElement('div');
+                page.innerHTML = `
+                    <article class="news-article">
+                        <header>
+                            <h1 class="article-title">Breaking News: Technology Update</h1>
+                            <p class="article-subtitle">New developments in web accessibility</p>
+                            <div class="article-meta">Published today</div>
+                        </header>
+                        
+                        <main class="article-content">
+                            <p class="lead">This is the lead paragraph with key information.</p>
+                            <p class="body-text">First paragraph of detailed content.</p>
+                            <p class="body-text">Second paragraph with more details.</p>
+                        </main>
+                        
+                        <!-- Component configuration via data attribute -->
+                        <div 
+                            class="glb-audio-description"
+                            data-containersToRead='[".article-title", ".article-subtitle", ".lead", ".body-text"]'
+                        ></div>
+                    </article>
+                `;
+                document.body.appendChild(page);
+            };
+            setupDataAttributeContent();
+
+            // User workflow: sistema lê configuração do HTML e inicia reprodução
+            const callback = vi.fn();
+            textReader.init(callback);
+            triggerVoicesChanged();
+
+            // Simular seletores extraídos do data attribute
+            const configuredSelectors = ['.article-title', '.article-subtitle', '.lead', '.body-text'];
+            textReader.readTextFromSelector(configuredSelectors);
+
+            // Verificar que todos os elementos configurados são processados
+            expect(mockSpeechSynthesis.speak).toHaveBeenCalled();
+
+            // Simular estado de reprodução antes de pausar
+            setSpeechState(true, false);
+            
+            // Simular interação do usuário com controles
+            textReader.pause();
+            expect(mockSpeechSynthesis.pause).toHaveBeenCalled();
+
+            // Simular estado pausado antes de retomar
+            setSpeechState(false, true);
+            textReader.resume();
+            expect(mockSpeechSynthesis.resume).toHaveBeenCalled();
+        });
+
+        it('should handle multiple components workflow', async () => {
+            // Setup página com múltiplos componentes
+            const setupMultipleComponents = () => {
+                const page = document.createElement('div');
+                page.innerHTML = `
+                    <header class="page-header">
+                        <h1 class="main-title">Site Title</h1>
+                        <nav class="breadcrumb">Home > News > Article</nav>
+                        <div 
+                            class="glb-audio-description header-reader"
+                            data-containersToRead='[".main-title", ".breadcrumb"]'
+                        ></div>
+                    </header>
+                    
+                    <main class="main-content">
+                        <article>
+                            <h2 class="article-headline">Article Headline</h2>
+                            <div class="article-body">Article content here...</div>
+                        </article>
+                        <div 
+                            class="glb-audio-description content-reader"
+                            data-containersToRead='[".article-headline", ".article-body"]'
+                        ></div>
+                    </main>
+                    
+                    <aside class="sidebar">
+                        <h3 class="sidebar-title">Related Articles</h3>
+                        <ul class="related-list">
+                            <li>Related article 1</li>
+                            <li>Related article 2</li>
+                        </ul>
+                        <div 
+                            class="glb-audio-description sidebar-reader"
+                            data-containersToRead='[".sidebar-title", ".related-list"]'
+                        ></div>
+                    </aside>
+                `;
+                document.body.appendChild(page);
+            };
+            setupMultipleComponents();
+
+            const callback = vi.fn();
+            textReader.init(callback);
+            triggerVoicesChanged();
+
+            // Simular uso de diferentes configurações para diferentes seções
+            const headerSelectors = ['.main-title', '.breadcrumb'];
+            const contentSelectors = ['.article-headline', '.article-body'];
+            const sidebarSelectors = ['.sidebar-title', '.related-list'];
+
+            // Cada componente deve poder operar independentemente
+            textReader.readTextFromSelector(headerSelectors);
+            expect(mockSpeechSynthesis.speak).toHaveBeenCalled();
+
+            textReader.stop();
+            textReader.readTextFromSelector(contentSelectors);
+            expect(mockSpeechSynthesis.speak).toHaveBeenCalled();
+
+            textReader.stop();
+            textReader.readTextFromSelector(sidebarSelectors);
+            expect(mockSpeechSynthesis.speak).toHaveBeenCalled();
+        });
+
         it('should handle complete accessibility workflow', async () => {
             // 1. User creates reader with accessibility preferences
             const accessibilityOptions: TextReaderOptions = {
