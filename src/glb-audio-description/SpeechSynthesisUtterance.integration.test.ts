@@ -59,7 +59,7 @@ describe('TextReader - Integration Tests', () => {
 
             // Simular estado de reprodução antes de pausar
             setSpeechState(true, false);
-            
+
             // Simular interação do usuário com controles
             textReader.pause();
             expect(mockSpeechSynthesis.pause).toHaveBeenCalled();

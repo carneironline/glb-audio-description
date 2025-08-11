@@ -12,9 +12,9 @@ export const createTestTextReader = (options?: TextReaderOptions): TextReader =>
 
 // Helper para criar elementos de teste com data-containersToRead
 export const createTestElementWithDataAttr = (
-    id: string, 
-    content: string, 
-    selectors: string[], 
+    id: string,
+    content: string,
+    selectors: string[],
     tag: string = 'div'
 ): HTMLElement => {
     const element = document.createElement(tag);
@@ -97,19 +97,19 @@ export const testDataAttributeParsing = (
     try {
         const element = document.createElement('div');
         element.setAttribute('data-containersToRead', dataValue);
-        
+
         const containers = element.dataset.containerstoread;
         if (!containers) {
             return { success: false, result: undefined };
         }
 
         const parsed = JSON.parse(containers);
-        
+
         if (expectedResult) {
             const matches = JSON.stringify(parsed) === JSON.stringify(expectedResult);
             return { success: matches, result: parsed };
         }
-        
+
         return { success: true, result: parsed };
     } catch (error) {
         return { success: false, error: error as Error };
@@ -151,7 +151,7 @@ export const createGloboArticleScenario = (): void => {
 
 // Helper para validar seletores CSS
 export const validateCSSSelectors = (selectors: string[]): boolean => {
-    return selectors.every(selector => {
+    return selectors.every((selector) => {
         try {
             document.querySelector(selector);
             return true;
@@ -170,7 +170,7 @@ export const simulateComponentInteraction = async (
     stopButton: HTMLElement | null;
 }> => {
     const component = document.querySelector(`.${componentClass}`) as HTMLElement;
-    
+
     if (!component) {
         return { component: null, playButton: null, stopButton: null };
     }
@@ -201,39 +201,39 @@ export const createDataAttributeTestConfig = (): {
         validConfigs: [
             {
                 selectors: ['.title'],
-                description: 'single selector'
+                description: 'single selector',
             },
             {
                 selectors: ['.title', '.subtitle', '.content'],
-                description: 'multiple selectors'
+                description: 'multiple selectors',
             },
             {
                 selectors: ['#main-title', '.article-body p', '.footer'],
-                description: 'mixed ID and class selectors'
+                description: 'mixed ID and class selectors',
             },
             {
                 selectors: ['.content[data-type="article"]', '.sidebar ul li'],
-                description: 'complex selectors with attributes'
-            }
+                description: 'complex selectors with attributes',
+            },
         ],
         invalidConfigs: [
             {
                 data: 'invalid json',
-                description: 'invalid JSON string'
+                description: 'invalid JSON string',
             },
             {
                 data: '{"invalid": "object"}',
-                description: 'object instead of array'
+                description: 'object instead of array',
             },
             {
                 data: '"string instead of array"',
-                description: 'string instead of array'
+                description: 'string instead of array',
             },
             {
                 data: '[1, 2, 3]',
-                description: 'array of numbers instead of strings'
-            }
-        ]
+                description: 'array of numbers instead of strings',
+            },
+        ],
     };
 };
 

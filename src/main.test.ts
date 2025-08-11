@@ -4,7 +4,7 @@ import { JSDOM } from 'jsdom';
 // Mock para lucide icons
 vi.mock('lucide', () => ({
     createIcons: vi.fn(),
-    icons: {}
+    icons: {},
 }));
 
 // Mock para CSS imports
@@ -21,7 +21,7 @@ const mockTextReader = {
 };
 
 vi.mock('./glb-audio-description/SpeechSynthesisUtterance', () => ({
-    TextReader: vi.fn(() => mockTextReader)
+    TextReader: vi.fn(() => mockTextReader),
 }));
 
 describe('Main.ts - Data Attributes Integration', () => {
@@ -30,7 +30,7 @@ describe('Main.ts - Data Attributes Integration', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        
+
         // Setup DOM
         dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
         document = dom.window.document;
@@ -68,7 +68,7 @@ describe('Main.ts - Data Attributes Integration', () => {
             // Verificar se o componente foi inicializado
             const component = document.querySelector('.glb-audio-description');
             expect(component?.classList.contains('is-not-played')).toBe(true);
-            
+
             // Verificar se os botões foram criados
             expect(component?.querySelector('.glb-audio-description__play')).toBeTruthy();
             expect(component?.querySelector('.glb-audio-description__stop')).toBeTruthy();
@@ -111,9 +111,9 @@ describe('Main.ts - Data Attributes Integration', () => {
 
             const components = document.querySelectorAll('.glb-audio-description');
             expect(components).toHaveLength(2);
-            
+
             // Ambos componentes devem ter sido inicializados
-            components.forEach(component => {
+            components.forEach((component) => {
                 expect(component.classList.contains('is-not-played')).toBe(true);
                 expect(component.querySelector('.glb-audio-description__play')).toBeTruthy();
                 expect(component.querySelector('.glb-audio-description__stop')).toBeTruthy();
@@ -173,7 +173,11 @@ describe('Main.ts - Data Attributes Integration', () => {
             playButton?.click();
 
             // Verificar se readTextFromSelector foi chamado com os seletores corretos
-            expect(mockTextReader.readTextFromSelector).toHaveBeenCalledWith(['.title', '.subtitle', '.content']);
+            expect(mockTextReader.readTextFromSelector).toHaveBeenCalledWith([
+                '.title',
+                '.subtitle',
+                '.content',
+            ]);
         });
 
         it('should update component classes correctly during playback', async () => {
@@ -264,16 +268,16 @@ describe('Main.ts - Data Attributes Integration', () => {
             const testCases = [
                 {
                     input: '[".title"]',
-                    expected: ['.title']
+                    expected: ['.title'],
                 },
                 {
                     input: '[".title", ".subtitle", ".content"]',
-                    expected: ['.title', '.subtitle', '.content']
+                    expected: ['.title', '.subtitle', '.content'],
                 },
                 {
                     input: '["#main-header", ".article-body p", ".footer"]',
-                    expected: ['#main-header', '.article-body p', '.footer']
-                }
+                    expected: ['#main-header', '.article-body p', '.footer'],
+                },
             ];
 
             for (const testCase of testCases) {

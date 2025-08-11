@@ -38,17 +38,17 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
                 { attr: '', description: 'empty string' },
                 { attr: '[]', description: 'empty array' },
                 { attr: '[""]', description: 'array with empty string' },
-                { attr: '[null]', description: 'array with null' }
+                { attr: '[null]', description: 'array with null' },
             ];
 
             testCases.forEach(({ attr, description }) => {
                 const element = document.createElement('div');
                 element.className = 'glb-audio-description';
-                
+
                 if (attr !== undefined) {
                     element.setAttribute('data-containersToRead', attr);
                 }
-                
+
                 document.body.appendChild(element);
 
                 expect(() => {
@@ -70,7 +70,7 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
                 '.content p:not(.advertisement)',
                 'article > section .paragraph',
                 '[data-content="true"]',
-                '.sidebar ul li:first-child'
+                '.sidebar ul li:first-child',
             ];
 
             const element = document.createElement('div');
@@ -99,7 +99,7 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
         it('should handle very long data-containersToRead arrays', () => {
             // Criar array com muitos seletores
             const longSelectorArray = Array.from({ length: 100 }, (_, i) => `.element-${i}`);
-            
+
             const element = document.createElement('div');
             element.className = 'glb-audio-description';
             element.setAttribute('data-containersToRead', JSON.stringify(longSelectorArray));
@@ -119,7 +119,7 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
                 '.título-português',
                 '.content[data-special="value with spaces"]',
                 '#元素-chinese-characters',
-                '.émoji-🎯-selector'
+                '.émoji-🎯-selector',
             ];
 
             const element = document.createElement('div');

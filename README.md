@@ -136,7 +136,7 @@ Adicione um elemento com a classe `glb-audio-description` e configure os seletor
             </div>
 
             <!-- Container do componente de áudio descrição -->
-            <div 
+            <div
                 class="glb-audio-description"
                 data-containersToRead='[".title", ".subtitle", ".content"]'
             ></div>
@@ -167,10 +167,7 @@ O atributo `data-containersToRead` é **obrigatório**. Sem ele, o componente n�
 <div class="glb-audio-description"></div>
 
 <!-- ✅ Funcionará corretamente -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='[".title", ".subtitle", ".content"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='[".title", ".subtitle", ".content"]'></div>
 ```
 
 ### 📝 Formato do data-containersToRead
@@ -179,22 +176,16 @@ O atributo deve conter um **array JSON válido** com seletores CSS:
 
 ```html
 <!-- Exemplo básico -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='[".title", ".content"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='[".title", ".content"]'></div>
 
 <!-- Seletores mais específicos -->
-<div 
+<div
     class="glb-audio-description"
     data-containersToRead='["h1.titulo-materia", ".materia-lead", ".materia-texto p"]'
 ></div>
 
 <!-- IDs e classes combinados -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='["#headline", ".subtitle", ".article-body"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='["#headline", ".subtitle", ".article-body"]'></div>
 ```
 
 #### 3. Estrutura Gerada Automaticamente
@@ -219,22 +210,13 @@ Você pode ter múltiplos componentes de áudio descrição na mesma página, ca
 
 ```html
 <!-- Componente para o cabeçalho -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='[".title", ".subtitle"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='[".title", ".subtitle"]'></div>
 
 <!-- Componente para o conteúdo principal -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='[".lead", ".content p"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='[".lead", ".content p"]'></div>
 
 <!-- Componente para uma seção específica -->
-<div 
-    class="glb-audio-description"
-    data-containersToRead='[".sidebar .related-articles"]'
-></div>
+<div class="glb-audio-description" data-containersToRead='[".sidebar .related-articles"]'></div>
 ```
 
 #### 5. Estados do Componente
