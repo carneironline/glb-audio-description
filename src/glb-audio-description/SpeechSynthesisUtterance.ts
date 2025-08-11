@@ -11,7 +11,7 @@ export class TextReader {
     private voices: SpeechSynthesisVoice[] = [];
     private currentText: string = '';
     private options: TextReaderOptions;
-    private delayMs: number = 500;
+    private delayMs: number = 100;
 
     constructor(options?: TextReaderOptions) {
         this.utterance = new SpeechSynthesisUtterance();
@@ -146,6 +146,11 @@ export class TextReader {
 
     private speakText(text: string): void {
         try {
+            if (!TextReader.isSupported()) {
+                console.warn('Speech Synthesis não suportado');
+                return;
+            }
+
             if (speechSynthesis.speaking) {
                 speechSynthesis.cancel();
             }
@@ -153,7 +158,7 @@ export class TextReader {
             this.utterance.text = text;
             speechSynthesis.speak(this.utterance);
         } catch (error) {
-            console.error('Erro ao sintetizar fala:', error);
+            console.error('Erro na síntese de fala:', error);
         }
     }
 
@@ -184,5 +189,9 @@ export class TextReader {
 
     public stop(): void {
         speechSynthesis.cancel();
+    }
+
+    public static isSupported(): boolean {
+        return 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
     }
 }
