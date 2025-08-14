@@ -22,19 +22,19 @@ O GLB Audio Description é um componente TypeScript que implementa funcionalidad
 
 -   ✅ **Síntese de voz nativa** usando Web Speech API
 -   ✅ **Seleção automática de voz** em português brasileiro
--   ✅ **Controles de reprodução** completos (play, pause, resume, stop)
+-   ✅ **Controles de reprodução** simplificados (play/stop unificado)
 -   ✅ **Leitura sequencial** de múltiplos elementos
 -   ✅ **Configuração flexível** de velocidade, tom e volume
 -   ✅ **Tratamento robusto de erros**
 -   ✅ **TypeScript** com tipagem completa
--   ✅ **Cobertura de testes** abrangente (97 testes)
+-   ✅ **Cobertura de testes** abrangente (117 testes)
 
 ## 🚀 Recursos
 
 ### Funcionalidades de Áudio
 
 -   **Síntese de texto em voz** com vozes em português brasileiro
--   **Controles de reprodução**: play, pause, resume, stop
+-   **Controles de reprodução**: play/stop unificado
 -   **Configuração de parâmetros**: velocidade (rate), tom (pitch), volume
 -   **Seleção de vozes** disponíveis no sistema
 -   **Leitura sequencial** de múltiplos elementos da página
@@ -101,10 +101,7 @@ audioDescription.init(() => {
 });
 
 // Controles de reprodução
-audioDescription.play(); // Iniciar reprodução
-audioDescription.pause(); // Pausar
-audioDescription.resume(); // Retomar
-audioDescription.stop(); // Parar
+audioDescription.play(); // Iniciar reprodução (ou parar se já estiver tocando)
 ```
 
 ### Integração em Páginas de Matéria
@@ -154,7 +151,7 @@ O script em `main.ts` irá automaticamente:
 
 -   🔍 **Detectar** todos os elementos com classe `glb-audio-description`
 -   📖 **Ler** o atributo `data-containersToRead` para identificar os seletores CSS
--   🎛️ **Gerar** os controles de play/pause e stop dentro do container
+-   🎛️ **Gerar** os controles de play/stop unificado dentro do container
 -   ⚙️ **Configurar** os event listeners para os botões
 -   � **Validar** se o atributo `data-containersToRead` está presente
 
@@ -196,10 +193,7 @@ O componente irá gerar esta estrutura HTML dentro do container:
 <div class="glb-audio-description is-not-played">
     <button class="glb-audio-description__button glb-audio-description__play">
         <i class="glb-audio-description__play-icon" data-lucide="play"></i>
-        <i class="glb-audio-description__pause-icon" data-lucide="pause"></i>
-    </button>
-    <button class="glb-audio-description__button glb-audio-description__stop">
-        <i class="glb-audio-description__stop-icon" data-lucide="square"></i>
+        <i class="glb-audio-description__pause-icon" data-lucide="square"></i>
     </button>
 </div>
 ```
@@ -225,7 +219,6 @@ O componente possui diferentes estados visuais:
 
 -   **`is-not-played`** - Estado inicial, ainda não foi reproduzido
 -   **`is-playing`** - Reproduzindo conteúdo
--   **`is-paused`** - Pausado
 -   **`is-stopped`** - Parado
 
 #### 6. Configuração Personalizada
@@ -255,7 +248,7 @@ new TextReader(options?: TextReaderOptions)
 ```typescript
 interface TextReaderOptions {
     lang?: string; // Código do idioma (default: 'pt-BR')
-    rate?: number; // Velocidade: 0.1 - 10 (default: 1.2)
+    rate?: number; // Velocidade: 0.1 - 10 (default: 1.0)
     pitch?: number; // Tom: 0 - 2 (default: 1)
     volume?: number; // Volume: 0 - 1 (default: 1)
 }
@@ -272,9 +265,9 @@ Inicializa o componente e carrega as vozes disponíveis.
 
 Lê texto dos elementos especificados pelos seletores CSS.
 
-#### `play(channel?: 'play' | 'resume'): void`
+#### `play(): void`
 
-Inicia ou retoma a reprodução.
+Inicia ou para a reprodução (comportamento toggle).
 
 #### `pause(): void`
 
@@ -322,7 +315,7 @@ Retorna lista de vozes disponíveis.
 const defaultOptions = {
     voice: 'Google português do Brasil',
     lang: 'pt-BR',
-    rate: 1.2,
+    rate: 1.0,
     pitch: 1.0,
     volume: 1.0,
 };
@@ -346,7 +339,7 @@ const globoSelectors = ['h1.titulo-materia', '.subtitulo-materia', '.texto-mater
 
 ## 🧪 Testes
 
-O projeto possui uma suíte de testes abrangente com **97 testes** cobrindo todos os aspectos do componente.
+O projeto possui uma suíte de testes abrangente com **117 testes** cobrindo todos os aspectos do componente.
 
 ### Executar Testes
 
@@ -367,8 +360,9 @@ pnpm test:run
 ### Cobertura de Testes
 
 -   ✅ **43 testes principais** - funcionalidades core
--   ✅ **39 testes de edge cases** - cenários extremos
--   ✅ **15 testes de integração** - workflows completos
+-   ✅ **44 testes de edge cases** - cenários extremos
+-   ✅ **17 testes de integração** - workflows completos
+-   ✅ **13 testes de integração main.ts** - testes de interface
 
 📋 **[Documentação Completa dos Testes](./TESTS.md)**
 
@@ -428,6 +422,23 @@ Se nenhuma voz preferida estiver disponível, o sistema:
 -   Continua funcionando com a voz padrão do sistema
 
 ## 🔧 Desenvolvimento
+
+### ⚠️ Mudanças Recentes (v2.0)
+
+A partir da versão 2.0, foram realizadas mudanças significativas para melhorar a compatibilidade com dispositivos móveis, especialmente Chrome Android:
+
+#### Alterações Principais:
+
+-   **Simplificação dos controles**: Removido botão pause/resume separado
+-   **Botão unificado**: Um único botão que alterna entre play ▶️ e stop ⏹️
+-   **Melhor UX mobile**: Evita problemas de pause/resume no Chrome Android
+-   **API simplificada**: Método `play()` não aceita mais parâmetros
+
+#### Comportamento Atual:
+
+-   **Primeiro clique**: Inicia reprodução
+-   **Segundo clique**: Para completamente e reseta para o início
+-   **Funcionalidade pause/resume**: Ainda disponível via API, mas não na interface
 
 ### Estrutura do Projeto
 
