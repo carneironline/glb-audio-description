@@ -18,7 +18,7 @@ export class TextReader {
         this.options = {
             volume: 1,
             lang: 'pt-BR',
-            rate: 1.2,
+            rate: 1,
             ...options,
         };
     }
@@ -82,12 +82,14 @@ export class TextReader {
                 .find(Boolean) || null;
 
         if (preferredVoice) {
+            console.log('preferredVoice:', preferredVoice);
             this.selectedVoice = preferredVoice;
             this.utterance.voice = preferredVoice;
         } else {
             const ptBrVoice = this.voices.find((v) => v.lang === 'pt-BR');
 
             if (ptBrVoice) {
+                console.log('ptBrVoice:', ptBrVoice);
                 this.selectedVoice = ptBrVoice;
                 this.utterance.voice = ptBrVoice;
             } else {
