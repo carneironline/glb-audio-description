@@ -195,7 +195,7 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
             // Agora chamar setVoiceByName que deve mostrar o warning
             newReader.setVoiceByName();
 
-            expect(consoleSpy).toHaveBeenCalledWith('Nenhuma voz preferida encontrada.');
+            expect(consoleSpy).toHaveBeenCalledWith('Nenhuma voz pt-BR encontrada.');
         });
 
         it('should handle automatic voice selection successfully', () => {
@@ -368,10 +368,10 @@ describe('TextReader - Edge Cases & Advanced Scenarios', () => {
             textReader.readTextFromSelector(['#test-paragraph']);
 
             expect(() => {
-                textReader.play('play');
-                textReader.play('resume');
-                textReader.play('play');
-                textReader.play('resume');
+                textReader.play();
+                textReader.play();
+                textReader.play();
+                textReader.play();
             }).not.toThrow();
         });
 

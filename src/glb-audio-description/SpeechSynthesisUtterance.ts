@@ -82,14 +82,12 @@ export class TextReader {
                 .find(Boolean) || null;
 
         if (preferredVoice) {
-            console.log('preferredVoice:', preferredVoice);
             this.selectedVoice = preferredVoice;
             this.utterance.voice = preferredVoice;
         } else {
-            const ptBrVoice = this.voices.find((v) => v.lang === 'pt-BR');
+            const ptBrVoice = this.voices.find((v) => v.lang && v.lang.includes('BR'));
 
             if (ptBrVoice) {
-                console.log('ptBrVoice:', ptBrVoice);
                 this.selectedVoice = ptBrVoice;
                 this.utterance.voice = ptBrVoice;
             } else {
@@ -171,17 +169,13 @@ export class TextReader {
         }
     }
 
-    public play(channel?: 'play' | 'resume'): void {
+    public play(): void {
         if (!this.currentText) {
             console.warn('Nenhum texto carregado. Use readTextFromSelector() primeiro.');
             return;
         }
 
-        if (channel === 'resume') {
-            speechSynthesis.resume();
-        } else {
-            this.speakText(this.currentText);
-        }
+        this.speakText(this.currentText);
     }
 
     public pause(): void {

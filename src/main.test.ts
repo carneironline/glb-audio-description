@@ -71,7 +71,7 @@ describe('Main.ts - Data Attributes Integration', () => {
 
             // Verificar se os botões foram criados
             expect(component?.querySelector('.glb-audio-description__play')).toBeTruthy();
-            expect(component?.querySelector('.glb-audio-description__stop')).toBeTruthy();
+            expect(component?.querySelector('.glb-audio-description__play-icon')).toBeTruthy();
         });
 
         it('should not initialize component without data-containersToRead', async () => {
@@ -116,7 +116,7 @@ describe('Main.ts - Data Attributes Integration', () => {
             components.forEach((component) => {
                 expect(component.classList.contains('is-not-played')).toBe(true);
                 expect(component.querySelector('.glb-audio-description__play')).toBeTruthy();
-                expect(component.querySelector('.glb-audio-description__stop')).toBeTruthy();
+                expect(component.querySelector('.glb-audio-description__play-icon')).toBeTruthy();
             });
         });
 
@@ -194,25 +194,24 @@ describe('Main.ts - Data Attributes Integration', () => {
             expect(component?.classList.contains('is-not-played')).toBe(false);
             expect(component?.classList.contains('is-playing')).toBe(true);
 
-            // Simular segundo clique (pausar)
+            // Simular segundo clique (parar reprodução)
             playButton?.click();
             expect(component?.classList.contains('is-playing')).toBe(false);
-            expect(component?.classList.contains('is-paused')).toBe(true);
+            expect(component?.classList.contains('is-stopped')).toBe(true);
         });
 
-        it('should stop playback and reset state when stop button is clicked', async () => {
+        it('should stop playback and reset state when play button is clicked again', async () => {
             await import('./main');
 
             const component = document.querySelector('.glb-audio-description');
             const playButton = component?.querySelector('.glb-audio-description__play') as HTMLButtonElement;
-            const stopButton = component?.querySelector('.glb-audio-description__stop') as HTMLButtonElement;
 
             // Iniciar reprodução
             playButton?.click();
             expect(component?.classList.contains('is-playing')).toBe(true);
 
-            // Parar reprodução
-            stopButton?.click();
+            // Parar reprodução (segundo clique no mesmo botão)
+            playButton?.click();
             expect(component?.classList.contains('is-playing')).toBe(false);
             expect(component?.classList.contains('is-stopped')).toBe(true);
             expect(component?.classList.contains('is-not-played')).toBe(true);

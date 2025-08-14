@@ -219,16 +219,16 @@ describe('TextReader', () => {
                 );
             });
 
-            it('should resume when channel is "resume"', () => {
-                setSpeechState(false, true);
+            it('should call speakText when play is called', () => {
+                const speakSpy = vi.spyOn(mockSpeechSynthesis, 'speak');
 
-                textReader.play('resume');
+                textReader.play();
 
-                expect(mockSpeechSynthesis.resume).toHaveBeenCalled();
+                expect(speakSpy).toHaveBeenCalled();
             });
 
-            it('should start speaking when channel is "play" or undefined', () => {
-                textReader.play('play');
+            it('should start speaking when play is called', () => {
+                textReader.play();
 
                 expect(mockSpeechSynthesis.speak).toHaveBeenCalled();
             });
