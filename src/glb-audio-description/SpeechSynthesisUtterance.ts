@@ -75,6 +75,7 @@ export class TextReader {
             'Luciana (Portuguese - Brazil)',
         ];
 
+        // Primeiro, tenta encontrar uma voz pelos nomes preferidos
         const preferredVoice =
             preferredNames
                 .map((name) => this.voices.find((v) => v.name && v.name.includes(name)))
@@ -84,7 +85,14 @@ export class TextReader {
             this.selectedVoice = preferredVoice;
             this.utterance.voice = preferredVoice;
         } else {
-            console.warn('Nenhuma voz preferida encontrada.');
+            const ptBrVoice = this.voices.find((v) => v.lang === 'pt-BR');
+
+            if (ptBrVoice) {
+                this.selectedVoice = ptBrVoice;
+                this.utterance.voice = ptBrVoice;
+            } else {
+                console.warn('Nenhuma voz pt-BR encontrada.');
+            }
         }
     }
 
