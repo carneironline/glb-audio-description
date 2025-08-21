@@ -1,7 +1,10 @@
 {
-    "name": "glb-audio-description",
+    "name": "@infoglobo/glb-audio-description",
     "private": false,
     "version": "1.0.1",
+    "publishConfig": {
+        "access": "public"
+    },
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
