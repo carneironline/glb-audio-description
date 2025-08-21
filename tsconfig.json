@@ -17,7 +17,7 @@
         "declaration": true,
         "declarationMap": true,
         "outDir": "dist",
-        "emitDeclarationOnly": true,
+        "emitDeclarationOnly": false,
 
         /* Linting */
         "strict": true,

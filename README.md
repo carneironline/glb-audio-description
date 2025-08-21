@@ -12,8 +12,8 @@ Componente de áudio descrição para páginas web, permitindo leitura de texto 
 -   [Uso Básico](#-uso-básico)
 -   [API](#-api)
 -   [Configuração](#-configuração)
--   [Exemplos](#-exemplos)
 -   [Suporte de Navegadores](#-suporte-de-navegadores)
+-   [Desenvolvimento](#-desenvolvimento)
 -   [Contribuição](#-contribuição)
 
 ## 🎯 Visão Geral
@@ -286,6 +286,8 @@ src/
 dist/                                         # 📤 Output do build (publicado no npm)
 ├── index.js                                 # 📄 Código compilado e bundled
 ├── index.d.ts                               # 📝 Definições TypeScript
+├── SpeechSynthesisUtterance.js              # 🎤 Classe TextReader compilada
+├── SpeechSynthesisUtterance.d.ts            # 📝 Definições da classe TextReader
 └── style.css                               # 🎨 CSS processado e otimizado
 ```
 
@@ -298,11 +300,73 @@ npm run build:lib
 # 🔨 Build padrão (desenvolvimento com Vite)
 npm run build
 
+# 📝 Gerar apenas arquivos de definição TypeScript
+npm run build:types
+
 # 🧪 Executar todos os testes (modo run, não-interativo)
 npm test
 
+# 👀 Executar testes em modo watch (re-executa ao salvar)
+npm run test:watch
+
 # 🎯 Executar testes com interface visual
+npm run test:ui
+
+# 🧹 Limpar pasta dist
+npm run clean
+
+# 🚀 Preparar para publicação (clean + build:lib)
+npm run prepublishOnly
 ```
+
+### Fluxo de Desenvolvimento
+
+1. **Desenvolvimento**: Trabalhe **apenas** na pasta `src/glb-audio-description/`
+2. **Testes**: Execute `npm test` para verificar suas alterações (104 testes passando ✅)
+3. **Build**: Use `npm run build:lib` para gerar o pacote final
+4. **Validação**: Verifique se todos os arquivos foram gerados corretamente
+
+### Verificação do Build
+
+Após `npm run build:lib`, confirme se foram gerados:
+
+```bash
+ls -la dist/
+# ✅ Deve conter:
+# index.js                    (~4.6 kB) - Código bundled principal
+# index.d.ts                  (~0.8 kB) - Definições TypeScript principais
+# SpeechSynthesisUtterance.js (~3.2 kB) - Classe TextReader compilada
+# SpeechSynthesisUtterance.d.ts (~1.2 kB) - Definições da classe TextReader
+# style.css                   (~0.6 kB) - Estilos processados
+```
+
+### Estrutura Final do Pacote NPM
+
+```
+dist/
+├── index.js                    # 📦 Entry point principal (ES modules)
+├── index.d.ts                  # 🏷️ Definições TypeScript principais
+├── SpeechSynthesisUtterance.js # 🎤 Classe TextReader (separada)
+├── SpeechSynthesisUtterance.d.ts # 🏷️ Definições da classe TextReader
+└── style.css                   # 🎨 Estilos opcionais
+
+package.json configura:
+├── main: "dist/index.js"
+├── types: "dist/index.d.ts"
+└── exports: { ".": "./dist/index.js", "./style.css": "./dist/style.css" }
+```
+
+### Como Contribuir
+
+1. Clone o repositório
+2. Instale as dependências: `npm install` ou `pnpm install`
+3. Faça suas alterações **apenas** na pasta `src/glb-audio-description/`
+4. Execute os testes: `npm test` (certifique-se que todos os 104 testes passem ✅)
+5. Gere o build: `npm run build:lib`
+6. Verifique se não há erros de TypeScript ou testes
+7. Submeta um Pull Request
+
+````
 
 ### Fluxo de Desenvolvimento
 
@@ -321,7 +385,7 @@ ls -la dist/
 # index.js     (~4.5 kB) - Código bundled
 # index.d.ts   (~1.0 kB) - Definições TypeScript
 # style.css    (~0.6 kB) - Estilos processados
-```
+````
 
 ### Estrutura Final do Pacote NPM
 
@@ -346,75 +410,6 @@ package.json configura:
 5. Gere o build: `npm run build:lib`
 6. Verifique se não há erros de TypeScript ou testes
 7. Submeta um Pull Request
-
-## 🔧 Troubleshooting
-
-### Problema: Arquivos `.d.ts` não são gerados
-
-Se o build não gerar os arquivos de definição TypeScript:
-
-```bash
-# Limpar e rebuildar com tipos
-npm run clean
-npm run build:lib
-
-# Verificar se os arquivos foram gerados
-ls -la dist/
-# Deve conter: index.js, index.d.ts, style.css
-
-# Ou gerar apenas os types
-npm run build:types
-```
-
-### Problema: Testes falhando
-
-**13 testes falhando** - principalmente `mockSpeechSynthesis.speak` não sendo chamado:
-
-```bash
-# Executar testes específicos para debug
-npm test -- --reporter=verbose
-
-# Executar apenas testes unitários (mais estáveis)
-npm test -- src/glb-audio-description/SpeechSynthesisUtterance.edge.test.ts
-
-# Verificar setup do DOM nos testes
-npm test -- --reporter=verbose --no-coverage
-```
-
-**Causa comum**: Elementos DOM não existem durante os testes. O setup já foi corrigido para criar elementos automaticamente.
-
-### Problema: Build falha
-
-Verifique se todas as dependências estão instaladas:
-
-```bash
-# Reinstalar dependências
-rm -rf node_modules pnpm-lock.yaml
-pnpm install
-
-# Verificar se TypeScript compila
-npx tsc --noEmit
-
-# Build step-by-step para debug
-npm run build:types
-npm run build:lib
-```
-
-### Problema: Pacote npm incompleto
-
-Verificar antes de publicar:
-
-```bash
-# Simular publicação (dry-run)
-npm pack --dry-run
-
-# Verificar estrutura do pacote
-tar -tzf *.tgz
-
-# Testar instalação local
-npm pack
-npm install ./glb-audio-description-1.0.0.tgz
-```
 
 ## 🤝 Contribuição
 
