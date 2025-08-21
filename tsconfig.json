@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
+
+        /* Module Resolution */
+        "moduleResolution": "bundler",
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+
+        /* Build for library */
+        "declaration": true,
+        "declarationMap": true,
+        "outDir": "dist",
+        "emitDeclarationOnly": true,
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": ["src/glb-audio-description/**/*"],
+    "exclude": ["src/glb-audio-description/**/*.test.ts", "src/main.ts", "src/main.test.ts"]
+}

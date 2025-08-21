@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GLB Audio Description</title>
+    </head>
+    <body>
+        <div id="app">
+            <div class="audio-description">
+                <div class="audio-description__label">Ouça a matéria</div>
+                <div
+                    class="glb-audio-description"
+                    data-containersToRead='[".title", ".subtitle", ".content"]'
+                ></div>
+            </div>
+
+            <h1 class="title">
+                Número 2 da diplomacia americana ataca Alexandre de Moraes em meio a crise com Trump
+            </h1>
+
+            <h2 class="subtitle">
+                Christopher Landau diz que ministro tenta 'silenciar indivíduos e empresas em solo americano';
+                X aplaude sanções
+            </h2>
+
+            <div class="content">
+                <p>
+                    A economia é a ciência que estuda como as sociedades utilizam seus recursos escassos para
+                    produzir bens e serviços e distribuí-los entre seus membros. Esse campo de estudo abrange
+                    diversas áreas, como a microeconomia, que analisa decisões individuais de consumidores e
+                    empresas, e a macroeconomia, que estuda fenômenos globais, como inflação, desemprego e
+                    crescimento econômico.
+                </p>
+            </div>
+        </div>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>

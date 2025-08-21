@@ -1,0 +1,63 @@
+{
+    "name": "glb-audio-description",
+    "private": false,
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./style.css": "./dist/style.css"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "build:lib": "npm run build:types && vite build --mode lib",
+        "build:types": "tsc --emitDeclarationOnly",
+        "preview": "vite preview",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
+        "test:run": "vitest run",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "npm run clean && npm run build:lib"
+    },
+    "keywords": [
+        "audio",
+        "accessibility",
+        "speech-synthesis",
+        "typescript",
+        "web-speech-api",
+        "audio-description"
+    ],
+    "author": "O Globo",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/carneironline/glb-audio-description.git"
+    },
+    "bugs": {
+        "url": "https://github.com/carneironline/glb-audio-description/issues"
+    },
+    "homepage": "https://github.com/carneironline/glb-audio-description#readme",
+    "devDependencies": {
+        "@types/node": "^22.5.0",
+        "@vitest/ui": "^3.2.4",
+        "jsdom": "^25.0.1",
+        "typescript": "~5.8.3",
+        "vite": "^7.1.2",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "lucide": "^0.540.0"
+    },
+    "peerDependencies": {
+        "typescript": ">=4.0.0"
+    }
+}
