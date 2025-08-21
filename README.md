@@ -8,13 +8,13 @@ Componente de áudio descrição para páginas web, permitindo leitura de texto 
 
 ## 📋 Índice
 
-- [Instalação](#-instalação)
-- [Uso Básico](#-uso-básico)
-- [API](#-api)
-- [Configuração](#️-configuração)
-- [Suporte de Navegadores](#-suporte-de-navegadores)
-- [Desenvolvimento](#-desenvolvimento)
-- [Contribuição](#-contribuição)
+-   [Instalação](#-instalação)
+-   [Uso Básico](#-uso-básico)
+-   [API](#-api)
+-   [Configuração](#-configuração)
+-   [Suporte de Navegadores](#-suporte-de-navegadores)
+-   [Desenvolvimento](#-desenvolvimento)
+-   [Contribuição](#-contribuição)
 
 ## 🎯 Visão Geral
 
@@ -22,137 +22,49 @@ O GLB Audio Description é um componente TypeScript que implementa funcionalidad
 
 ### Características Principais
 
-✅ **Síntese de voz nativa** usando Web Speech API
-✅ **Seleção automática de voz** em português brasileiro
-✅ **Controles de reprodução** simplificados (play/stop unificado)
-✅ **Leitura sequencial** de múltiplos elementos
-✅ **Configuração flexível** de velocidade, tom e volume
-✅ **Tratamento robusto de erros**
-✅ **TypeScript** com tipagem completa
-✅ **Zero dependências** (exceto Lucide para ícones)
+-   ✅ **Síntese de voz nativa** usando Web Speech API
+-   ✅ **Seleção automática de voz** em português brasileiro
+-   ✅ **Controles de reprodução** simplificados (play/stop unificado)
+-   ✅ **Leitura sequencial** de múltiplos elementos
+-   ✅ **Configuração flexível** de velocidade, tom e volume
+-   ✅ **Tratamento robusto de erros**
+-   ✅ **TypeScript** com tipagem completa
+-   ✅ **Zero dependências** (exceto Lucide para ícones)
 
 ## 📦 Instalação
 
 ```bash
 # npm
-npm install @infoglobo/glb-audio-description
+npm install glb-audio-description
 
 # yarn
-yarn add @infoglobo/glb-audio-description
+yarn add glb-audio-description
 
 # pnpm
-pnpm add @infoglobo/glb-audio-description
-```sh
+pnpm add glb-audio-description
+```
 
 ### CSS (Opcional)
 
 Se você quiser usar os estilos padrão, importe o CSS:
 
 ```typescript
-```typescript
-import { TextReader, initAudioDescription } from '@infoglobo/glb-audio-description';
-import type { TextReaderOptions } from '@infoglobo/glb-audio-description';
-const audioDescription = new TextReader({
-    rate: 1.0,
-    volume: 1.0,
-    lang: 'pt-BR',
-});
-
-// Inicializar - vozes em português são selecionadas automaticamente
-audioDescription.init(() => {
-    console.log('Audio Description iniciado!');
-
-    // Ler conteúdo específico
-    audioDescription.readTextFromSelector(['h1', '.content p']);
-});
-
-## 📋 Índice
-
-- [Instalação](#instalacao)
-- [Uso Básico](#uso-basico)
-- [API](#api)
-- [Configuração](#configuracao)
-- [Suporte de Navegadores](#suporte-de-navegadores)
-- [Desenvolvimento](#desenvolvimento)
-- [Contribuição](#contribuicao)
-```typescript
-import { initAudioDescription } from '@infoglobo/glb-audio-description';
-### Características Principais
-
-✅ **Síntese de voz nativa** usando Web Speech API
-✅ **Seleção automática de voz** em português brasileiro
-✅ **Controles de reprodução** simplificados (play/stop unificado)
-✅ **Leitura sequencial** de múltiplos elementos
-✅ **Configuração flexível** de velocidade, tom e volume
-✅ **Tratamento robusto de erros**
-✅ **TypeScript** com tipagem completa
-✅ **Zero dependências** (exceto Lucide para ícones)
-```sh
-
-### HTML para Interface Automática
-
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Exemplo GLB Audio Description</title>
-    </head>
-    <body>
-## 📦 Instalação
-
-```bash
-# npm
-npm install @infoglobo/glb-audio-description
-
-# yarn
-yarn add @infoglobo/glb-audio-description
-
-# pnpm
-pnpm add @infoglobo/glb-audio-description
+import 'glb-audio-description/style.css';
 ```
-        <article>
-            <h1>Título do Artigo</h1>
-            <p class="content">Conteúdo do artigo...</p>
 
-            <!-- Container do componente -->
-            <div class="glb-audio-description" data-containerstoread='["h1", ".content"]'></div>
-        </article>
-### CSS (Opcional)
+## 💻 Uso Básico
 
-Se você quiser usar os estilos padrão, importe o CSS:
+### Importação
 
 ```typescript
-import '@infoglobo/glb-audio-description/style.css';
+import { TextReader, initAudioDescription } from 'glb-audio-description';
+import type { TextReaderOptions } from 'glb-audio-description';
 ```
-    </body>
-</html>
-```sh
 
-## 📚 API
-
-### TextReader
-
-#### Constructor
-
-```typescript
-new TextReader(options?: TextReaderOptions)
-```sh
-
-#### TextReaderOptions
-
-```typescript
-interface TextReaderOptions {
-    lang?: string; // Código do idioma (default: 'pt-BR')
-    rate?: number; // Velocidade: 0.1 - 10 (default: 1.0)
-    pitch?: number; // Tom: 0 - 2 (default: 1)
-    volume?: number; // Volume: 0 - 1 (default: 1)
-}
-```sh
 ### Exemplo Simples com TextReader
 
 ```typescript
-import { TextReader } from '@infoglobo/glb-audio-description';
+import { TextReader } from 'glb-audio-description';
 
 // Criar instância do TextReader
 const audioDescription = new TextReader({
@@ -174,6 +86,62 @@ audioDescription.play(); // Iniciar reprodução
 audioDescription.stop(); // Parar reprodução
 ```
 
+### Exemplo com Interface Automática
+
+```typescript
+import { initAudioDescription } from 'glb-audio-description';
+import 'glb-audio-description/style.css';
+
+// Inicializar com interface automática
+initAudioDescription({
+    selector: '.glb-audio-description', // Seletor dos containers
+    rate: 1.0,
+    volume: 0.8,
+});
+```
+
+### HTML para Interface Automática
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Exemplo GLB Audio Description</title>
+    </head>
+    <body>
+        <article>
+            <h1>Título do Artigo</h1>
+            <p class="content">Conteúdo do artigo...</p>
+
+            <!-- Container do componente -->
+            <div class="glb-audio-description" data-containerstoread='["h1", ".content"]'></div>
+        </article>
+    </body>
+</html>
+```
+
+## 📚 API
+
+### TextReader
+
+#### Constructor
+
+```typescript
+new TextReader(options?: TextReaderOptions)
+```
+
+#### TextReaderOptions
+
+```typescript
+interface TextReaderOptions {
+    lang?: string; // Código do idioma (default: 'pt-BR')
+    rate?: number; // Velocidade: 0.1 - 10 (default: 1.0)
+    pitch?: number; // Tom: 0 - 2 (default: 1)
+    volume?: number; // Volume: 0 - 1 (default: 1)
+}
+```
+
 #### Métodos Principais
 
 ```typescript
@@ -182,15 +150,6 @@ init(callback: () => void): void
 
 // Ler texto de elementos específicos
 readTextFromSelector(selectors: string[]): void
-### Estrutura do Pacote
-
-```text
-dist/
-├── index.js           # Código JavaScript compilado
-├── index.d.ts         # Definições TypeScript
-├── style.css          # Estilos CSS opcionais
-└── ...
-```
 
 // Controles de reprodução
 play(): void       // Iniciar ou continuar reprodução
@@ -204,37 +163,15 @@ setPitch(pitch: number): void
 setVolume(volume: number): void
 setLang(lang: string): void
 
-### Estrutura Final do Pacote NPM
-
-```text
-dist/
-├── index.js      # 📦 Código principal (ES modules)
-├── index.d.ts    # 🏷️ Definições TypeScript
-└── style.css     # 🎨 Estilos opcionais
-
-package.json configura:
-├── main: "dist/index.js"
-├── types: "dist/index.d.ts"
-└── exports: { ".": "./dist/index.js", "./style.css": "./dist/style.css" }
-```
 // Utilitários
 listVoices(): SpeechSynthesisVoice[]
 static isSupported(): boolean
-```sh
+```
 
 ### initAudioDescription
 
 #### Função de Inicialização Automática
 
-### Como Contribuir
-
-1. Clone o repositório
-2. Instale as dependências: `npm install` ou `pnpm install`
-3. Faça suas alterações **apenas** na pasta `src/glb-audio-description/`
-4. Execute os testes: `npm test` (certifique-se que todos os 104 testes passem ✅)
-5. Gere o build: `npm run build:lib`
-6. Verifique se não há erros de TypeScript ou testes
-7. Submeta um Pull Request
 ```typescript
 interface InitOptions extends TextReaderOptions {
     selector?: string; // Seletor CSS (default: '.glb-audio-description')
@@ -288,7 +225,7 @@ O componente vem com estilos CSS padrão, mas você pode customizar:
 ### Verificação de Suporte
 
 ```typescript
-import { TextReader } from '@infoglobo/glb-audio-description';
+import { TextReader } from 'glb-audio-description';
 
 if (TextReader.isSupported()) {
     // Inicializar componente
@@ -326,11 +263,13 @@ dist/
 └── ...
 ```
 
+## 🔧 Desenvolvimento
+
 ### Estrutura do Projeto
 
 O pacote está organizado para máxima clareza e facilidade de desenvolvimento:
 
-```text
+```
 src/
 ├── glb-audio-description/                    # 📦 Código principal do pacote
 │   ├── index.ts                              # 🚀 Entry point - exports principais
@@ -350,7 +289,7 @@ dist/                                         # 📤 Output do build (publicado 
 ├── SpeechSynthesisUtterance.js              # 🎤 Classe TextReader compilada
 ├── SpeechSynthesisUtterance.d.ts            # 📝 Definições da classe TextReader
 └── style.css                               # 🎨 CSS processado e otimizado
-```text
+```
 
 ### Scripts Disponíveis
 
@@ -378,6 +317,7 @@ npm run clean
 
 # 🚀 Preparar para publicação (clean + build:lib)
 npm run prepublishOnly
+```
 
 ### Fluxo de Desenvolvimento
 
@@ -400,6 +340,34 @@ ls -la dist/
 # style.css                   (~0.6 kB) - Estilos processados
 ```
 
+### Estrutura Final do Pacote NPM
+
+```
+dist/
+├── index.js                    # 📦 Entry point principal (ES modules)
+├── index.d.ts                  # 🏷️ Definições TypeScript principais
+├── SpeechSynthesisUtterance.js # 🎤 Classe TextReader (separada)
+├── SpeechSynthesisUtterance.d.ts # 🏷️ Definições da classe TextReader
+└── style.css                   # 🎨 Estilos opcionais
+
+package.json configura:
+├── main: "dist/index.js"
+├── types: "dist/index.d.ts"
+└── exports: { ".": "./dist/index.js", "./style.css": "./dist/style.css" }
+```
+
+### Como Contribuir
+
+1. Clone o repositório
+2. Instale as dependências: `npm install` ou `pnpm install`
+3. Faça suas alterações **apenas** na pasta `src/glb-audio-description/`
+4. Execute os testes: `npm test` (certifique-se que todos os 104 testes passem ✅)
+5. Gere o build: `npm run build:lib`
+6. Verifique se não há erros de TypeScript ou testes
+7. Submeta um Pull Request
+
+````
+
 ### Fluxo de Desenvolvimento
 
 1. **Desenvolvimento**: Trabalhe na pasta `src/glb-audio-description/`
@@ -418,6 +386,30 @@ ls -la dist/
 # index.d.ts   (~1.0 kB) - Definições TypeScript
 # style.css    (~0.6 kB) - Estilos processados
 ````
+
+### Estrutura Final do Pacote NPM
+
+```
+dist/
+├── index.js      # 📦 Código principal (ES modules)
+├── index.d.ts    # 🏷️ Definições TypeScript
+└── style.css     # 🎨 Estilos opcionais
+
+package.json configura:
+├── main: "dist/index.js"
+├── types: "dist/index.d.ts"
+└── exports: { ".": "./dist/index.js", "./style.css": "./dist/style.css" }
+```
+
+### Como Contribuir
+
+1. Clone o repositório
+2. Instale as dependências: `npm install` ou `pnpm install`
+3. Faça suas alterações **apenas** na pasta `src/glb-audio-description/`
+4. Execute os testes: `npm test`
+5. Gere o build: `npm run build:lib`
+6. Verifique se não há erros de TypeScript ou testes
+7. Submeta um Pull Request
 
 ## 🤝 Contribuição
 
